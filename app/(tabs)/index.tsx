@@ -1,13 +1,12 @@
 import { Image, StyleSheet, View, Text, FlatList } from "react-native";
 
-import { HelloWave } from "@/components/HelloWave";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
-import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { FontAwesome6 } from "@expo/vector-icons";
+import { Collapsible } from "@/components/Collapsible";
 
 interface Customer {
   _id: string;
@@ -15,10 +14,18 @@ interface Customer {
   __v: number;
 }
 
+interface Currencies {
+  _id: string;
+  name: string;
+  symbol: string;
+  exchange_rate: number;
+  __v: number;
+}
+
 interface Income {
   amount: number;
   customer_id: Customer;
-  currency_id: object; // we need an interface for currency
+  currency_id: Currencies;
   status: string;
   payment_date: string | null;
   description: string;
@@ -79,8 +86,8 @@ export default function HomeScreen() {
       headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
       headerImage={
         <Image
-          source={require("@/assets/images/partial-react-logo.png")}
-          style={styles.reactLogo}
+          source={require("@/assets/images/money.jpeg")}
+          style={styles.background}
         />
       }
     >
@@ -106,17 +113,23 @@ export default function HomeScreen() {
 
           return (
             <View style={styles.item}>
-              <Text style={styles.amount}>Amount: {item.amount}</Text>
               <Text style={styles.amount}>
-                Customer: {item.customer_id.name}
+                {item.amount} {item.currency_id.symbol}
               </Text>
+              <Text style={styles.customer}>{item.customer_id.name}</Text>
+
+              {item.description ? (
+                <Collapsible title="Description">
+                  <Text>{item.description}</Text>
+                </Collapsible>
+              ) : null}
+
+              <View style={styles.iconContainer}>{statusIcon}</View>
               {item.payment_date ? (
-                <Text style={styles.amount}>
-                  Payment Date: {formatDate(item.payment_date)}
+                <Text style={styles.dateText}>
+                  {formatDate(item.payment_date)}
                 </Text>
               ) : null}
-              {/* Prikazujemo ikonu */}
-              <View style={styles.iconContainer}>{statusIcon}</View>
             </View>
           );
         }}
@@ -135,12 +148,11 @@ const styles = StyleSheet.create({
     gap: 8,
     marginBottom: 8,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
+  background: {
+    height: 250,
+    width: "100%",
     bottom: 0,
     left: 0,
-    position: "absolute",
   },
   center: {
     flex: 1,
@@ -153,14 +165,24 @@ const styles = StyleSheet.create({
   item: {
     position: "relative",
     padding: 10,
-    paddingRight: 40,
     marginBottom: 10,
     backgroundColor: "#f0f0f0",
     borderRadius: 5,
     width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    gap: 6,
   },
   amount: {
-    fontSize: 18,
+    fontSize: 26,
+    fontWeight: 800,
+  },
+  customer: {
+    fontSize: 16,
+    fontWeight: 600,
+  },
+  dateText: {
+    textAlign: "right",
   },
   iconContainer: {
     position: "absolute",
