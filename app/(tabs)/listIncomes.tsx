@@ -1,10 +1,10 @@
 import { Image, StyleSheet, View, Text, FlatList, Alert } from "react-native";
 import axios from "axios";
-import { MaterialIcons } from "@expo/vector-icons";
-import { FontAwesome6 } from "@expo/vector-icons";
+import { MaterialIcons, FontAwesome6 } from "@expo/vector-icons";
 import { useState, useEffect } from "react";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedView } from "@/components/ThemedView";
+import { useRouter } from "expo-router";
 
 interface Income {
   amount: number;
@@ -20,6 +20,7 @@ export default function listIncomes() {
   const [incomes, setIncomes] = useState<Income[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   const fetchIncomes = async () => {
     try {
@@ -44,10 +45,9 @@ export default function listIncomes() {
     }
   };
 
-  const editIncome = (income: Income) => {
-    // Navigate to the edit screen or show a modal for editing
-    // Example: navigate("EditIncome", { income });
-    Alert.alert("Edit Income", "You can now edit this income.");
+  const editIncome = (incomeId: string) => {
+    console.log("incomeId : :: ", incomeId);
+    router.push(`/edit-income/${incomeId}`);
   };
 
   useEffect(() => {
@@ -98,22 +98,18 @@ export default function listIncomes() {
                   {item.amount} {item.currency_id.symbol}
                 </Text>
                 <Text style={styles.customer}>{item.customer_id.name}</Text>
-
                 {item.description && (
                   <Text style={styles.description}>{item.description}</Text>
                 )}
-
                 <View style={styles.iconContainer}>{statusIcon}</View>
-
                 <Text style={styles.dateText}>{item.payment_date}</Text>
 
-                {/* Edit and Delete Buttons */}
                 <View style={styles.actionsContainer}>
                   <MaterialIcons
                     name="edit"
                     size={28}
                     color="blue"
-                    onPress={() => editIncome(item)}
+                    onPress={() => editIncome(item._id)}
                   />
                   <MaterialIcons
                     name="delete"
@@ -135,6 +131,8 @@ const styles = StyleSheet.create({
   background: {
     height: 250,
     width: "100%",
+    bottom: 0,
+    left: 0,
   },
   item: {
     padding: 10,
