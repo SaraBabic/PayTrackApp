@@ -1,6 +1,12 @@
-import { Image, StyleSheet, View, Text, FlatList } from "react-native";
+import {
+  Image,
+  StyleSheet,
+  View,
+  Text,
+  FlatList,
+  ScrollView,
+} from "react-native";
 
-import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedView } from "@/components/ThemedView";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -82,16 +88,7 @@ export default function HomeScreen() {
   }
 
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
-      headerImage={
-        <Image
-          source={require("@/assets/images/money.jpeg")}
-          style={styles.background}
-        />
-      }
-    >
-      <ThemedView style={styles.titleContainer}></ThemedView>
+    <ThemedView style={styles.container}>
       <FlatList
         data={incomes}
         keyExtractor={(item, index) => index.toString()}
@@ -134,15 +131,14 @@ export default function HomeScreen() {
           );
         }}
       />
-    </ParallaxScrollView>
+    </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
+  container: {
+    marginTop: 50,
+    paddingHorizontal: 30,
   },
   stepContainer: {
     gap: 8,

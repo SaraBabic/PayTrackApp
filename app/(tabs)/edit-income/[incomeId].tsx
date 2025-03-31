@@ -16,11 +16,12 @@ import {
 } from "react-native";
 import axios from "axios";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import ParallaxScrollView from "@/components/ParallaxScrollView";
 import Button from "@/components/Button";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { useNavigation } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { ThemedView } from "@/components/ThemedView";
 
 interface RouteParams {
   incomeId: string;
@@ -148,15 +149,7 @@ export default function EditIncome() {
   };
 
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
-      headerImage={
-        <Image
-          source={require("@/assets/images/money.jpeg")}
-          style={styles.background}
-        />
-      }
-    >
+    <ThemedView style={styles.container}>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -281,12 +274,14 @@ export default function EditIncome() {
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
-    </ParallaxScrollView>
+    </ThemedView>
   );
 }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop: 50,
+    paddingHorizontal: 30,
   },
   label: {
     fontSize: 16,

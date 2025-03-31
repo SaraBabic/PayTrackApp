@@ -15,8 +15,8 @@ import {
   Image,
 } from "react-native";
 import axios from "axios";
+import { ThemedView } from "@/components/ThemedView";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import ParallaxScrollView from "@/components/ParallaxScrollView";
 import Button from "@/components/Button";
 
 interface Customer {
@@ -117,15 +117,7 @@ export default function CreateIncome() {
   };
 
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
-      headerImage={
-        <Image
-          source={require("@/assets/images/money.jpeg")}
-          style={styles.background}
-        />
-      }
-    >
+    <ThemedView style={styles.container}>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -256,13 +248,15 @@ export default function CreateIncome() {
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
-    </ParallaxScrollView>
+    </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop: 50,
+    paddingHorizontal: 30,
   },
   label: {
     fontSize: 16,

@@ -2,7 +2,6 @@ import { Image, StyleSheet, View, Text, FlatList, Alert } from "react-native";
 import axios from "axios";
 import { MaterialIcons, FontAwesome6 } from "@expo/vector-icons";
 import { useState, useEffect } from "react";
-import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedView } from "@/components/ThemedView";
 import { useRouter } from "expo-router";
 
@@ -63,71 +62,65 @@ export default function listIncomes() {
   }
 
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
-      headerImage={
-        <Image
-          source={require("@/assets/images/money.jpeg")}
-          style={styles.background}
-        />
-      }
-    >
-      <ThemedView>
-        <FlatList
-          data={incomes}
-          keyExtractor={(item) => item._id}
-          renderItem={({ item }) => {
-            let statusIcon;
-            if (item.status === "paid") {
-              statusIcon = (
-                <MaterialIcons name="check-circle" size={28} color="green" />
-              );
-            } else if (item.status === "pending") {
-              statusIcon = (
-                <MaterialIcons name="pending" size={28} color="orange" />
-              );
-            } else if (item.status === "canceled") {
-              statusIcon = (
-                <FontAwesome6 name="sack-xmark" size={26} color="red" />
-              );
-            }
-
-            return (
-              <View style={styles.item}>
-                <Text style={styles.amount}>
-                  {item.amount} {item.currency_id.symbol}
-                </Text>
-                <Text style={styles.customer}>{item.customer_id.name}</Text>
-                {item.description && (
-                  <Text style={styles.description}>{item.description}</Text>
-                )}
-                <View style={styles.iconContainer}>{statusIcon}</View>
-                <Text style={styles.dateText}>{item.payment_date}</Text>
-
-                <View style={styles.actionsContainer}>
-                  <MaterialIcons
-                    name="edit"
-                    size={28}
-                    color="blue"
-                    onPress={() => editIncome(item._id)}
-                  />
-                  <MaterialIcons
-                    name="delete"
-                    size={28}
-                    color="red"
-                    onPress={() => deleteIncome(item._id)}
-                  />
-                </View>
-              </View>
+    <ThemedView style={styles.container}>
+      <FlatList
+        data={incomes}
+        keyExtractor={(item) => item._id}
+        renderItem={({ item }) => {
+          let statusIcon;
+          if (item.status === "paid") {
+            statusIcon = (
+              <MaterialIcons name="check-circle" size={28} color="green" />
             );
-          }}
-        />
-      </ThemedView>
-    </ParallaxScrollView>
+          } else if (item.status === "pending") {
+            statusIcon = (
+              <MaterialIcons name="pending" size={28} color="orange" />
+            );
+          } else if (item.status === "canceled") {
+            statusIcon = (
+              <FontAwesome6 name="sack-xmark" size={26} color="red" />
+            );
+          }
+
+          return (
+            <View style={styles.item}>
+              <Text style={styles.amount}>
+                {item.amount} {item.currency_id.symbol}
+              </Text>
+              <Text style={styles.customer}>{item.customer_id.name}</Text>
+              {item.description && (
+                <Text style={styles.description}>{item.description}</Text>
+              )}
+              <View style={styles.iconContainer}>{statusIcon}</View>
+              <Text style={styles.dateText}>{item.payment_date}</Text>
+
+              <View style={styles.actionsContainer}>
+                <MaterialIcons
+                  name="edit"
+                  size={28}
+                  color="blue"
+                  onPress={() => editIncome(item._id)}
+                />
+                <MaterialIcons
+                  name="delete"
+                  size={28}
+                  color="red"
+                  onPress={() => deleteIncome(item._id)}
+                />
+              </View>
+            </View>
+          );
+        }}
+      />
+    </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    marginTop: 50,
+    paddingHorizontal: 30,
+  },
   background: {
     height: 250,
     width: "100%",
