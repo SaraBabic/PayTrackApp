@@ -43,6 +43,7 @@ export default function HomeScreen() {
   const [incomes, setIncomes] = useState<Income[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [currencies, setCurrencies] = useState<Currencies[]>([]);
 
   const formatDate = (date: string | null) => {
     if (date) {
@@ -54,12 +55,15 @@ export default function HomeScreen() {
   };
 
   useEffect(() => {
-    const fetchIncomes = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get(
-          "http://192.168.2.222:5002/api/incomes"
-        );
-        setIncomes(response.data);
+        const [incomesRes, currenciesRes] = await Promise.all([
+          axios.get("http://192.168.2.222:5002/api/incomes"),
+          axios.get("http://192.168.2.222:5002/api/currencies"),
+        ]);
+
+        setIncomes(incomesRes.data);
+        setCurrencies(currenciesRes.data);
         setLoading(false);
       } catch (err) {
         console.error("Error fetching data:", err);
@@ -68,8 +72,20 @@ export default function HomeScreen() {
       }
     };
 
-    fetchIncomes();
+    fetchData();
   }, []);
+
+  const calculateTotalInEuros = () => {
+    if (!incomes.length || !currencies.length) return 0;
+
+    return incomes.reduce((total, income) => {
+      const currency = currencies.find((c) => c._id === income.currency_id._id);
+      if (!currency) return total;
+
+      // Pretvaramo sve u EUR: amount / exchange_rate
+      return total + income.amount / currency.exchange_rate;
+    }, 0);
+  };
 
   if (loading) {
     return (
@@ -89,6 +105,12 @@ export default function HomeScreen() {
 
   return (
     <ThemedView style={styles.container}>
+      <View style={styles.header}>
+        <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+          Total amount: € {calculateTotalInEuros().toFixed(2)}
+        </Text>
+      </View>
+
       <FlatList
         data={incomes}
         keyExtractor={(item, index) => index.toString()}
@@ -137,8 +159,15 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 50,
+    paddingTop: 50,
     paddingHorizontal: 30,
+  },
+  header: {
+    padding: 10,
+    marginBottom: 10,
+    backgroundColor: "#f0f0f0",
+    borderRadius: 5,
+    width: "100%",
   },
   stepContainer: {
     gap: 8,
