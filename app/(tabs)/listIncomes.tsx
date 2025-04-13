@@ -44,6 +44,28 @@ export default function listIncomes() {
     }
   };
 
+  const confirmDeleteIncome = (
+    incomeId: string,
+    amount: number,
+    symbol: string
+  ) => {
+    Alert.alert(
+      "Delete income",
+      `Are you shure you want to delete income: ${amount} ${symbol}?`,
+      [
+        {
+          text: "No, exit",
+          style: "cancel",
+        },
+        {
+          text: "Yes",
+          onPress: () => deleteIncome(incomeId),
+          style: "destructive",
+        },
+      ]
+    );
+  };
+
   const editIncome = (incomeId: string) => {
     console.log("incomeId : :: ", incomeId);
     router.push(`/edit-income/${incomeId}`);
@@ -105,7 +127,13 @@ export default function listIncomes() {
                   name="delete"
                   size={28}
                   color="red"
-                  onPress={() => deleteIncome(item._id)}
+                  onPress={() =>
+                    confirmDeleteIncome(
+                      item._id,
+                      item.amount,
+                      item.currency_id.symbol
+                    )
+                  }
                 />
               </View>
             </View>
