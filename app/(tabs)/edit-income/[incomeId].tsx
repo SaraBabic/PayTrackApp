@@ -49,6 +49,7 @@ interface Income {
 }
 
 export default function EditIncome() {
+  const API_URL = process.env.EXPO_PUBLIC_API_URL;
   const route = useRoute<RouteProp<{ params: RouteParams }, "params">>();
   const navigation = useNavigation();
 
@@ -78,9 +79,7 @@ export default function EditIncome() {
 
   const fetchCustomers = async () => {
     try {
-      const response = await axios.get<Customer[]>(
-        "http://192.168.2.222:5002/api/customers"
-      );
+      const response = await axios.get<Customer[]>(`${API_URL}/api/customers`);
       setCustomers(response.data);
     } catch (error) {
       console.error("Error fetching customers:", error);
@@ -89,9 +88,7 @@ export default function EditIncome() {
 
   const fetchCurrencies = async () => {
     try {
-      const response = await axios.get<Currency[]>(
-        "http://192.168.2.222:5002/api/currencies"
-      );
+      const response = await axios.get<Currency[]>(`${API_URL}/api/currencies`);
       setCurrencies(response.data);
     } catch (error) {
       console.error("Error fetching currencies:", error);
@@ -101,7 +98,7 @@ export default function EditIncome() {
   const fetchIncome = async () => {
     try {
       const response = await axios.get<Income>(
-        `http://192.168.2.222:5002/api/incomes/${incomeId}`
+        `${API_URL}/api/incomes/${incomeId}`
       );
       const data = response.data;
       setAmount(data.amount.toString());
@@ -131,10 +128,7 @@ export default function EditIncome() {
     };
 
     try {
-      await axios.put(
-        `http://192.168.2.222:5002/api/incomes/${incomeId}`,
-        updatedIncome
-      );
+      await axios.put(`${API_URL}/api/incomes/${incomeId}`, updatedIncome);
       Alert.alert("Success", "Income updated successfully!");
       navigation.goBack();
     } catch (error) {

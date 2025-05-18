@@ -13,6 +13,8 @@ import { useEffect, useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { Collapsible } from "@/components/Collapsible";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback } from "react";
 
 interface Customer {
   _id: string;
@@ -40,6 +42,7 @@ interface Income {
 }
 
 export default function HomeScreen() {
+  const API_URL = process.env.EXPO_PUBLIC_API_URL;
   const [incomes, setIncomes] = useState<Income[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -54,26 +57,28 @@ export default function HomeScreen() {
     return null;
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [incomesRes, currenciesRes] = await Promise.all([
-          axios.get("http://192.168.2.222:5002/api/incomes"),
-          axios.get("http://192.168.2.222:5002/api/currencies"),
-        ]);
+  useFocusEffect(
+    useCallback(() => {
+      const fetchData = async () => {
+        try {
+          const [incomesRes, currenciesRes] = await Promise.all([
+            axios.get(`${API_URL}/api/incomes`),
+            axios.get(`${API_URL}/api/currencies`),
+          ]);
 
-        setIncomes(incomesRes.data);
-        setCurrencies(currenciesRes.data);
-        setLoading(false);
-      } catch (err) {
-        console.error("Error fetching data:", err);
-        setError("Došlo je do greške pri učitavanju podataka.");
-        setLoading(false);
-      }
-    };
+          setIncomes(incomesRes.data);
+          setCurrencies(currenciesRes.data);
+          setLoading(false);
+        } catch (err) {
+          console.error("Error fetching data:", err);
+          setError("Došlo je do greške pri učitavanju podataka.");
+          setLoading(false);
+        }
+      };
 
-    fetchData();
-  }, []);
+      fetchData();
+    }, [])
+  );
 
   const calculateTotalInEuros = () => {
     if (!incomes.length || !currencies.length) return 0;

@@ -15,6 +15,7 @@ import {
   Image,
 } from "react-native";
 import axios from "axios";
+import { useNavigation } from "@react-navigation/native";
 import { ThemedView } from "@/components/ThemedView";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import Button from "@/components/Button";
@@ -41,6 +42,8 @@ interface Income {
 }
 
 export default function CreateIncome() {
+  const API_URL = process.env.EXPO_PUBLIC_API_URL;
+  const navigation = useNavigation();
   const [amount, setAmount] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [paymentDate, setPaymentDate] = useState<Date>(new Date());
@@ -63,9 +66,7 @@ export default function CreateIncome() {
 
   const fetchCustomers = async () => {
     try {
-      const response = await axios.get<Customer[]>(
-        "http://192.168.2.222:5002/api/customers"
-      );
+      const response = await axios.get<Customer[]>(`${API_URL}/api/customers`);
       setCustomers(response.data);
     } catch (error) {
       console.error("Error fetching customers:", error);
@@ -74,9 +75,7 @@ export default function CreateIncome() {
 
   const fetchCurrencies = async () => {
     try {
-      const response = await axios.get<Currency[]>(
-        "http://192.168.2.222:5002/api/currencies"
-      );
+      const response = await axios.get<Currency[]>(`${API_URL}/api/currencies`);
       setCurrencies(response.data);
     } catch (error) {
       console.error("Error fetching currencies:", error);
@@ -99,8 +98,13 @@ export default function CreateIncome() {
     };
 
     try {
-      await axios.post("http://192.168.2.222:5002/api/incomes", newIncome);
-      Alert.alert("Success", "Income added successfully!");
+      await axios.post(`${API_URL}/api/incomes`, newIncome);
+      Alert.alert("Success", "Income added successfully!", [
+        {
+          text: "OK",
+          onPress: () => navigation.navigate("Home" as never),
+        },
+      ]);
       setAmount("");
       setDescription("");
       setSelectedCustomer(null);
@@ -152,11 +156,16 @@ export default function CreateIncome() {
                 mode="date"
                 display="default"
                 onChange={(event, selectedDate) => {
+                  if (event.type === "set" && selectedDate) {
+                    setPaymentDate(selectedDate);
+                  }
                   setShowDatePicker(false);
-                  if (selectedDate) setPaymentDate(selectedDate);
                 }}
               />
             )}
+            <Text style={styles.selectedDateText}>
+              Selected Date: {paymentDate.toLocaleDateString()}
+            </Text>
 
             {/* Customer Picker */}
             <Text style={styles.label}>Customer:</Text>
@@ -256,12 +265,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: 50,
-    paddingHorizontal: 30,
+    paddingHorizontal: 20,
   },
   label: {
     fontSize: 16,
     fontWeight: "bold",
-    marginTop: 10,
+    marginTop: 15,
+    color: "#fff",
+  },
+  selectedDateText: {
+    fontSize: 16,
+    marginTop: 5,
     color: "#fff",
   },
   background: {

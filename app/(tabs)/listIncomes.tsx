@@ -15,15 +15,25 @@ interface Income {
   _id: string;
 }
 
-export default function listIncomes() {
+export default function ListIncomes() {
+  const API_URL = process.env.EXPO_PUBLIC_API_URL;
   const [incomes, setIncomes] = useState<Income[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
+  const formatDate = (date: string | null) => {
+    if (date) {
+      const dateObj = new Date(date);
+      const formattedDate = new Intl.DateTimeFormat("hr-HR").format(dateObj);
+      return formattedDate;
+    }
+    return null;
+  };
+
   const fetchIncomes = async () => {
     try {
-      const response = await axios.get("http://192.168.2.222:5002/api/incomes");
+      const response = await axios.get(`${API_URL}/api/incomes`);
       setIncomes(response.data);
       setLoading(false);
     } catch (err) {
@@ -35,7 +45,7 @@ export default function listIncomes() {
 
   const deleteIncome = async (incomeId: string) => {
     try {
-      await axios.delete(`http://192.168.2.222:5002/api/incomes/${incomeId}`);
+      await axios.delete(`${API_URL}/api/incomes/${incomeId}`);
       setIncomes(incomes.filter((income) => income._id !== incomeId));
       Alert.alert("Success", "Income deleted successfully.");
     } catch (error) {
@@ -114,7 +124,9 @@ export default function listIncomes() {
                 <Text style={styles.description}>{item.description}</Text>
               )}
               <View style={styles.iconContainer}>{statusIcon}</View>
-              <Text style={styles.dateText}>{item.payment_date}</Text>
+              <Text style={styles.dateText}>
+                {formatDate(item.payment_date)}
+              </Text>
 
               <View style={styles.actionsContainer}>
                 <MaterialIcons
