@@ -47,7 +47,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="ListIncomes"
+        name="listIncomes"
         options={{
           title: "Edit",
           tabBarIcon: ({ color }) => (

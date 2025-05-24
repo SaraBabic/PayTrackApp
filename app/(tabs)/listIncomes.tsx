@@ -14,6 +14,9 @@ interface Income {
   description: string;
   _id: string;
 }
+type RootStackParamList = {
+  EditIncome: { incomeId: string };
+};
 
 export default function ListIncomes() {
   const API_URL = process.env.EXPO_PUBLIC_API_URL;
@@ -77,7 +80,6 @@ export default function ListIncomes() {
   };
 
   const editIncome = (incomeId: string) => {
-    console.log("incomeId : :: ", incomeId);
     router.push(`/edit-income/${incomeId}`);
   };
 
