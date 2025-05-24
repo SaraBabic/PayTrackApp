@@ -37,7 +37,7 @@ export default function TabLayout() {
           ),
         }}
       />
-      <Tabs.Screen
+      {/* <Tabs.Screen
         name="createIncome"
         options={{
           title: "Add Income",
@@ -45,8 +45,17 @@ export default function TabLayout() {
             <FontAwesome6 name="money-bill-trend-up" size={24} color={color} />
           ),
         }}
-      />
+      /> */}
       <Tabs.Screen
+        name="manage"
+        options={{
+          title: "Manage",
+          tabBarIcon: ({ color }) => (
+            <FontAwesome6 name="sliders" size={24} color={color} />
+          ),
+        }}
+      />
+      {/* <Tabs.Screen
         name="listIncomes"
         options={{
           title: "Edit",
@@ -58,7 +67,7 @@ export default function TabLayout() {
             />
           ),
         }}
-      />
+      /> */}
     </Tabs>
   );
 }

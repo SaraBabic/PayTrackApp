@@ -19,6 +19,7 @@ import { useNavigation } from "@react-navigation/native";
 import { ThemedView } from "@/components/ThemedView";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import Button from "@/components/Button";
+import { Stack, useRouter } from "expo-router";
 
 interface Customer {
   _id: string;
@@ -58,6 +59,7 @@ export default function CreateIncome() {
   >("customer");
   const [status, setStatus] = useState<string>("pending");
   const statusOptions = ["pending", "paid", "canceled"];
+  const router = useRouter();
 
   useEffect(() => {
     fetchCustomers();
@@ -122,6 +124,7 @@ export default function CreateIncome() {
 
   return (
     <ThemedView style={styles.container}>
+      <Button title="← Back" onPress={() => router.back()} />
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : "height"}

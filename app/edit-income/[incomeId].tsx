@@ -42,8 +42,8 @@ interface Income {
   amount: number;
   description: string;
   payment_date: string;
-  customer_id: Customer; // može biti string ili objekat Customer
-  currency_id: Currency; // isto za valutu
+  customer_id: Customer;
+  currency_id: Currency;
   status: string;
 }
 

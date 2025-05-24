@@ -4,6 +4,7 @@ import { MaterialIcons, FontAwesome6 } from "@expo/vector-icons";
 import { useState, useEffect } from "react";
 import { ThemedView } from "@/components/ThemedView";
 import { useRouter } from "expo-router";
+import Button from "@/components/Button";
 
 interface Income {
   amount: number;
@@ -97,6 +98,7 @@ export default function ListIncomes() {
 
   return (
     <ThemedView style={styles.container}>
+      <Button title="← Back" onPress={() => router.back()} />
       <FlatList
         data={incomes}
         keyExtractor={(item) => item._id}

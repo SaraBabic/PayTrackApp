@@ -1,11 +1,4 @@
-import {
-  Image,
-  StyleSheet,
-  View,
-  Text,
-  FlatList,
-  ScrollView,
-} from "react-native";
+import { StyleSheet, View, Text, FlatList } from "react-native";
 
 import { ThemedView } from "@/components/ThemedView";
 import axios from "axios";
