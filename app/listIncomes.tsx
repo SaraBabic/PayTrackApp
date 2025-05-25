@@ -98,7 +98,7 @@ export default function ListIncomes() {
 
   return (
     <ThemedView style={styles.container}>
-      <Button title="← Back" onPress={() => router.back()} />
+      <Button title="← Back" variant="back" onPress={() => router.back()} />
       <FlatList
         data={incomes}
         keyExtractor={(item) => item._id}
@@ -162,7 +162,7 @@ export default function ListIncomes() {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 50,
+    paddingTop: 50,
     paddingHorizontal: 30,
   },
   background: {

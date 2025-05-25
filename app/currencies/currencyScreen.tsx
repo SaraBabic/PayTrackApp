@@ -5,6 +5,7 @@ import {
   FlatList,
   Alert,
   TouchableOpacity,
+  Dimensions,
 } from "react-native";
 import { ThemedView } from "@/components/ThemedView";
 import axios from "axios";
@@ -21,6 +22,8 @@ interface Currency {
   symbol: string;
   exchange_rate: number;
 }
+
+const screenHeight = Dimensions.get("window").height;
 
 export default function CurrencyScreen() {
   const API_URL = process.env.EXPO_PUBLIC_API_URL;
@@ -75,7 +78,7 @@ export default function CurrencyScreen() {
 
   return (
     <ThemedView style={styles.container}>
-      <Button title="← Back" onPress={() => router.back()} />
+      <Button title="← Back" variant="back" onPress={() => router.back()} />
       <Button
         title="Add currency"
         onPress={() => router.push(`/currencies/addCurrency` as any)}
@@ -123,6 +126,7 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 50,
     paddingHorizontal: 30,
+    minHeight: screenHeight,
   },
   item: {
     padding: 10,

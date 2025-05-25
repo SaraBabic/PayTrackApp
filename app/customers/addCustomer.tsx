@@ -40,7 +40,7 @@ export default function AddCustomer() {
 
   return (
     <ThemedView style={styles.container}>
-      <Button title="← Back" onPress={() => router.back()} />
+      <Button title="← Back" variant="back" onPress={() => router.back()} />
 
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : undefined}

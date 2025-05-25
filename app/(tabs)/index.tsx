@@ -77,10 +77,11 @@ export default function HomeScreen() {
     if (!incomes.length || !currencies.length) return 0;
 
     return incomes.reduce((total, income) => {
+      if (income.status !== "paid") return total;
+
       const currency = currencies.find((c) => c._id === income.currency_id._id);
       if (!currency) return total;
 
-      // Pretvaramo sve u EUR: amount / exchange_rate
       return total + income.amount / currency.exchange_rate;
     }, 0);
   };
@@ -104,8 +105,9 @@ export default function HomeScreen() {
   return (
     <ThemedView style={styles.container}>
       <View style={styles.header}>
-        <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-          Total amount: € {calculateTotalInEuros().toFixed(2)}
+        <Text style={{ fontSize: 16, color: "#fff" }}>Total amount:</Text>
+        <Text style={{ fontSize: 32, fontWeight: "bold", color: "#fff" }}>
+          {calculateTotalInEuros().toFixed(2)} €
         </Text>
       </View>
 
@@ -161,9 +163,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
   },
   header: {
-    padding: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 30,
+    alignItems: "center",
+    marginTop: 10,
     marginBottom: 10,
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "#5E5D5C",
     borderRadius: 5,
     width: "100%",
   },

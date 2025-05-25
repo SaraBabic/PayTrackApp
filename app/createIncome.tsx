@@ -104,7 +104,7 @@ export default function CreateIncome() {
       Alert.alert("Success", "Income added successfully!", [
         {
           text: "OK",
-          onPress: () => navigation.navigate("Home" as never),
+          onPress: () => router.back(),
         },
       ]);
       setAmount("");
@@ -124,13 +124,13 @@ export default function CreateIncome() {
 
   return (
     <ThemedView style={styles.container}>
-      <Button title="← Back" onPress={() => router.back()} />
+      <Button title="← Back" variant="back" onPress={() => router.back()} />
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-          <View style={styles.container}>
+          <View>
             <Text style={styles.label}>Amount:</Text>
             <TextInput
               style={styles.input}
@@ -267,8 +267,8 @@ export default function CreateIncome() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 50,
-    paddingHorizontal: 20,
+    paddingTop: 50,
+    paddingHorizontal: 30,
   },
   label: {
     fontSize: 16,

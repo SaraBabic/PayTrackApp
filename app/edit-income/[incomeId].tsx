@@ -19,7 +19,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import Button from "@/components/Button";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RouteProp, useRoute } from "@react-navigation/native";
-import { useNavigation } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ThemedView } from "@/components/ThemedView";
 
@@ -68,6 +68,7 @@ export default function EditIncome() {
   const [modalType, setModalType] = useState<
     "customer" | "currency" | "status"
   >("customer");
+  const router = useRouter();
 
   const statusOptions = ["pending", "paid", "canceled"];
   useEffect(() => {
@@ -141,6 +142,7 @@ export default function EditIncome() {
   } else {
     return (
       <ThemedView style={styles.container}>
+        <Button title="← Back" variant="back" onPress={() => router.back()} />
         <KeyboardAvoidingView
           style={{ flex: 1 }}
           behavior={Platform.OS === "ios" ? "padding" : "height"}
