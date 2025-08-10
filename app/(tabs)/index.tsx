@@ -8,6 +8,8 @@ import { FontAwesome6 } from "@expo/vector-icons";
 import { Collapsible } from "@/components/Collapsible";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback } from "react";
+import { useRouter } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface Customer {
   _id: string;
@@ -40,6 +42,19 @@ export default function HomeScreen() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [currencies, setCurrencies] = useState<Currencies[]>([]);
+  const router = useRouter();
+
+  useEffect(() => {
+    async function checkToken() {
+      const token = await AsyncStorage.getItem("token");
+      if (token) {
+        // router.replace("/(tabs)/");  // preusmeri na Home tab screen (app/index.tsx)
+      } else {
+        router.replace("/auth/login"); // idi na Login ekran
+      }
+    }
+    checkToken();
+  }, []);
 
   const formatDate = (date: string | null) => {
     if (date) {

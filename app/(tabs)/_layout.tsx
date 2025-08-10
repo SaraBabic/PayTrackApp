@@ -37,15 +37,6 @@ export default function TabLayout() {
           ),
         }}
       />
-      {/* <Tabs.Screen
-        name="createIncome"
-        options={{
-          title: "Add Income",
-          tabBarIcon: ({ color }) => (
-            <FontAwesome6 name="money-bill-trend-up" size={24} color={color} />
-          ),
-        }}
-      /> */}
       <Tabs.Screen
         name="manage"
         options={{
@@ -55,19 +46,15 @@ export default function TabLayout() {
           ),
         }}
       />
-      {/* <Tabs.Screen
-        name="listIncomes"
+      <Tabs.Screen
+        name="profile"
         options={{
-          title: "Edit",
+          title: "Profile",
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons
-              name="view-dashboard-edit"
-              size={24}
-              color={color}
-            />
+            <FontAwesome6 name="profile" size={24} color={color} />
           ),
         }}
-      /> */}
+      />
     </Tabs>
   );
 }
