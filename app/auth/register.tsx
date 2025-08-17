@@ -18,8 +18,12 @@ export default function RegisterScreen() {
       });
       Alert.alert("Success", "Account created!");
       router.replace("/auth/login");
-    } catch (err) {
-      Alert.alert("Registration failed", "Try again with different email");
+    } catch (err: any) {
+      console.log("error ::: ", err);
+      Alert.alert(
+        "Registration failed",
+        err.response?.data?.message || "Unknown error"
+      );
     }
   };
 

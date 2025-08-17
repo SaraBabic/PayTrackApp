@@ -10,6 +10,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { useCallback } from "react";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { jwtDecode } from "jwt-decode";
 
 interface Customer {
   _id: string;
@@ -47,10 +48,21 @@ export default function HomeScreen() {
   useEffect(() => {
     async function checkToken() {
       const token = await AsyncStorage.getItem("token");
-      if (token) {
-        // router.replace("/(tabs)/");  // preusmeri na Home tab screen (app/index.tsx)
-      } else {
-        router.replace("/auth/login"); // idi na Login ekran
+      if (!token) {
+        router.replace("/auth/login");
+        return;
+      }
+
+      try {
+        const decoded: any = jwtDecode(token);
+        const now = Date.now() / 1000;
+        if (decoded.exp < now) {
+          await AsyncStorage.removeItem("token");
+          await AsyncStorage.removeItem("userData");
+          router.replace("/auth/login");
+        }
+      } catch (e) {
+        router.replace("/auth/login");
       }
     }
     checkToken();

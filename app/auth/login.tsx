@@ -5,7 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
 
@@ -13,28 +13,28 @@ export default function LoginScreen() {
     try {
       const res = await axios.post(
         `${process.env.EXPO_PUBLIC_API_URL}/api/auth/login`,
-        {
-          email,
-          password,
-        }
+        { username, password }
       );
 
-      const { token, user } = res.data; // pretpostavimo da API vraća i korisnika
+      const { token, user } = res.data;
+
+      // sačuvaj token i user
       await AsyncStorage.setItem("token", token);
       await AsyncStorage.setItem("userData", JSON.stringify(user));
-      router.replace("/"); // idi na home
+
+      router.replace("/");
     } catch (err) {
-      Alert.alert("Login failed", "Check your credentials");
+      Alert.alert("Login failed", "Check username or password");
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Email:</Text>
+      <Text style={styles.label}>Username:</Text>
       <TextInput
         placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
+        value={username}
+        onChangeText={setUsername}
         style={styles.input}
       />
       <Text style={styles.label}>Password:</Text>
